@@ -6,11 +6,13 @@ from urllib.parse import urlparse
 from collections import deque
 import re
 
-url = "http://schafeld.com"
+# Please use with discretion, crawling websites puts load on them and may be seen as aggressive act!
+# Enter website to be crawled here
+url = "http://"
 # a queue of urls to be crawled
 new_urls = deque([url])
 
-# a set of urls that we have already been processed 
+# a set of urls that has already been processed 
 processed_urls = set()
 # a set of domains inside the target website
 local_urls = set()
@@ -21,7 +23,7 @@ broken_urls = set()
 
 # process urls one by one until we exhaust the queue
 while len(new_urls):
-    # move next url from the queue to the set of processed urls
+    # move next url from the queue to the set of processed urls  and not anchor.endswith('.mkv')
     url = new_urls.popleft()
     processed_urls.add(url)
     # get url's content
@@ -45,7 +47,10 @@ while len(new_urls):
 
     for link in soup.find_all('a'):
         # extract link url from the anchor
-        anchor = link.attrs["href"] if "href" in link.attrs else ''
+        # careful, this will try to parse any media files too
+        # anchor = link.attrs["href"] if "href" in link.attrs else ''
+        # TODO: Make a filter array function
+        anchor = link.attrs["href"] if "href" in link.attrs and not (link.attrs["href"].endswith('.mkv') or link.attrs["href"].endswith('.mp4') or link.attrs["href"].endswith('.jpg'))  else ''
 
         if anchor.startswith('/'):
             local_link = base_url + anchor
