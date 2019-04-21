@@ -1,4 +1,3 @@
-# Inspirational source: https://medium.freecodecamp.org/how-to-build-a-url-crawler-to-map-a-website-using-python-6a287be1da11
 from bs4 import BeautifulSoup
 import requests
 import requests.exceptions
